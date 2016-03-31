@@ -1,8 +1,15 @@
 (ns tic-tac-toejure.core
-  (:require [tic-tac-toejure.ui :refer :all]))
+  (:require [tic-tac-toejure.ui :refer :all]
+            [tic-tac-toejure.ai :refer :all]))
 
 (def build-board
   (vec (repeat 9 "")))
+
+(def human-player
+  {:marker "X" :move-getter get-player-move})
+
+(def computer-player
+  {:marker "O" :move-getter random-move})
 
 (defn as-int [input]
   (read-string input))
@@ -10,14 +17,18 @@
 (defn place-marker [board position marker]
   (assoc board (as-int position) marker))
 
+(defn take-turn [board player]
+  (def move ((get player :move-getter)))
+  (def marker (get player :marker))
+  (place-marker board move marker))
+
 ; Game loop
 
-(defn play [board]
+(defn play [board players]
   (print-board board)
-  (def move (get-player-move))
-  (def next-board (place-marker board move "X"))
-  (if-not (= move "q")
-    (recur next-board)))
+  (def next-board (take-turn board (first players)))
+  (recur next-board (reverse players)))
 
 (defn -main [& args]
-  (play build-board))
+  (def players (vector human-player computer-player))
+  (play build-board players))

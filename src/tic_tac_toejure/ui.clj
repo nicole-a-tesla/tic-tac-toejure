@@ -29,7 +29,8 @@
   (print-board board (partition 3 board)))
   ([board rows]
     (print-it (build-view(first rows)))
-    (if-not (empty? (rest rows))
+    (if (empty? (rest rows))
+      (print-it "")
       (recur board (rest rows)))
     )
 )

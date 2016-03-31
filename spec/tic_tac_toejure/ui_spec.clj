@@ -6,7 +6,7 @@
 
 (def empty-board-output-str (str empty-space-view empty-space-view empty-space-view "\n"
                                  empty-space-view empty-space-view empty-space-view "\n"
-                                 empty-space-view empty-space-view empty-space-view "\n"))
+                                 empty-space-view empty-space-view empty-space-view "\n\n"))
 
 (describe "Ui"
   (around [it]

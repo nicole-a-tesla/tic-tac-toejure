@@ -2,7 +2,6 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toejure.core :refer :all]))
 
-
 (describe "Ui"
   (around [it]
     (with-out-str (it)))
@@ -21,11 +20,15 @@
   )
 
   (describe "test print-board"
-
     (it "prints board to stdout"
-      (should= (str space "\n")
+
+      (should= (str space space space "\n"
+                    space space space "\n"
+                    space space space "\n")
         (with-out-str (print-board))))
   )
 
-
+  ; (describe "print board with marker"
+  ;   (it "prints board with marker after placed")
+  ; )
 )

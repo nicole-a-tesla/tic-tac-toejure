@@ -28,7 +28,10 @@
         (with-out-str (print-board))))
   )
 
-  ; (describe "print board with marker"
-  ;   (it "prints board with marker after placed")
-  ; )
+  (describe "prompt user for position choice"
+    (it "test gets user input"
+      (with-redefs [prompt (fn [& _] "0")]
+        (should= "0"
+          (get-player-move))))
+  )
 )

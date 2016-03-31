@@ -1,4 +1,4 @@
 (ns tic-tac-toejure.ai)
 
 (defn random-move []
-  (rand-int 9))
+  (str (rand-int 9)))

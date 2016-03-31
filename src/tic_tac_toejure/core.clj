@@ -1,5 +1,6 @@
 (ns tic-tac-toejure.core
-  (:require [tic-tac-toejure.ui :refer :all]))
+  (:require [tic-tac-toejure.ui :refer :all]
+            [tic-tac-toejure.ai :refer :all]))
 
 (def build-board
   (vec (repeat 9 "")))
@@ -14,9 +15,11 @@
 
 (defn play [board]
   (print-board board)
-  (def move (get-player-move))
-  (def next-board (place-marker board move "X"))
-  (if-not (= move "q")
+  (def human-move (get-player-move))
+  (def intermediate-board (place-marker board human-move "X"))
+  (print-board intermediate-board)
+  (def next-board (place-marker intermediate-board (random-move) "O"))
+  (if-not (= human-move "q")
     (recur next-board)))
 
 (defn -main [& args]

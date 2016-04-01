@@ -1,6 +1,7 @@
 (ns tic-tac-toejure.ui-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toejure.ui :refer :all]))
+            [tic-tac-toejure.ui :refer :all]
+            [tic-tac-toejure.core :refer :all]))
 
 (def empty-board (vec (repeat 9 "")))
 
@@ -37,7 +38,7 @@
   (describe "build-board-view"
     (it "builds board representation for empty board"
       (should= (repeat 9 ":___")
-      (build-view empty-board))))
+        (build-view empty-board))))
 
 )
 

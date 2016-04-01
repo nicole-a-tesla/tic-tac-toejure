@@ -1,7 +1,6 @@
 (ns tic-tac-toejure.core
   (:require [tic-tac-toejure.ui :refer :all]
             [tic-tac-toejure.ai :refer :all]))
-
 (def build-board
   (vec (repeat 9 "")))
 
@@ -12,17 +11,31 @@
   {:marker "O" :move-getter random-move})
 
 (defn as-int [input]
-  (read-string input))
+  (Integer/parseInt input))
+
+(defn is-valid-position? [user-input]
+  (re-matches #"[0-8]" user-input))
+
+(defn is-position-available? [board user-input]
+  (= "" (get board (as-int user-input))))
+
+(defn input-is-valid? [board user-input]
+  (and (is-valid-position? user-input) (is-position-available? board user-input)))
+
+(defn get-valid-move
+  ([board move-getter]
+    (get-valid-move board move-getter (move-getter)))
+  ([board move-getter move]
+    (if (input-is-valid? board move)
+      (as-int move)
+      (recur board move-getter (move-getter)))))
 
 (defn place-marker [board position marker]
-  (assoc board (as-int position) marker))
+  (assoc board position marker))
 
 (defn take-turn [board player]
-  (def move ((get player :move-getter)))
-  (def marker (get player :marker))
-  (place-marker board move marker))
-
-; Game loop
+  (def move (get-valid-move board (:move-getter player)))
+  (place-marker board move (:marker player)))
 
 (defn play [board players]
   (print-board board)

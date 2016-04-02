@@ -71,4 +71,28 @@
       (should= 3
         (get-valid-move build-board (fn [] "3")))))
 
+
+
+(describe "game-over"
+  (it "returns false if board contanis blanks"
+    (def almost-full ["x" "x" "x" ""])
+    (def full ["x" "x" "x" "x"])
+
+    (should= false
+      (game-over? almost-full)))
+
+  (it "returns true if board contains no blanks"
+    (should= true
+      (game-over? full))))
+
+
+(describe "Game End Conditions"
+  (def test-players (vector human-player computer-player))
+  (it "game ends if board is full"
+    (should= "Game Over!\n"
+      (subs (with-out-str
+        (play (vec (repeat 9 "X")) test-players)) 40)
+      ))
+  )
+
 (run-specs)

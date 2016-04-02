@@ -37,10 +37,16 @@
   (def move (get-valid-move board (:move-getter player)))
   (place-marker board move (:marker player)))
 
+(defn game-over? [board]
+  (empty? (filter #(= "" %) board)))
+
 (defn play [board players]
   (print-board board)
-  (def next-board (take-turn board (first players)))
-  (recur next-board (reverse players)))
+  (if (game-over? board)
+    (print-it "Game Over!")
+    (do
+      (def next-board (take-turn board (first players)))
+      (recur next-board (reverse players)))))
 
 (defn -main [& args]
   (def players (vector human-player computer-player))

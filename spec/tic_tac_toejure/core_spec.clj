@@ -2,6 +2,8 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toejure.core :refer :all]))
 
+(def test-players (vector human-player computer-player))
+
 (describe "place-marker"
   (it "adds marker to space"
     (should= ["X" "" "" "" "" "" "" "" ""]
@@ -71,28 +73,78 @@
       (should= 3
         (get-valid-move build-board (fn [] "3")))))
 
-
-
-(describe "game-over"
-  (it "returns false if board contanis blanks"
-    (def almost-full ["x" "x" "x" ""])
-    (def full ["x" "x" "x" "x"])
-
+(describe "game-stats :game-over"
+  (it "false if board contans blanks"
+    (def almost-full ["" "x" "x" ""])
+    (def stats (get-game-stats almost-full test-players))
     (should= false
-      (game-over? almost-full)))
+      (:game-over stats)))
 
-  (it "returns true if board contains no blanks"
+  (it "true if board contains no blanks"
+    (def full ["x" "x" "x" "x"])
+    (def stats (get-game-stats full test-players))
     (should= true
-      (game-over? full))))
+      (:game-over stats)))
 
+  (it "true if a player has won"
+    (def o-won ["O" "O" "O" "" "" "" "" "" ""])
+    (def stats (get-game-stats o-won test-players))
+    (should= true
+      (:game-over stats))))
+
+(describe "get-all-spaces-for"
+  (it "gets all spaces for given marker"
+    (def new-board ["O" "O" "O" "" "" "" "" "" ""])
+      (should= [0 1 2]
+        (get-all-spaces-for new-board "O"))))
+
+(describe "get-winner"
+  (it "returns winner's marker"
+    (def test-board ["O" "O" "O" "" "" "" "" "" ""])
+    (should= "O"
+      (get-winner test-board test-players)))
+
+  (it "returns nil if no winner"
+    (should-be-nil
+      (get-winner (vec (repeat 9 "")) test-players))))
 
 (describe "Game End Conditions"
-  (def test-players (vector human-player computer-player))
   (it "game ends if board is full"
-    (should= "Game Over!\n"
-      (subs (with-out-str
-        (play (vec (repeat 9 "X")) test-players)) 40)
-      ))
+    (should= true
+      (.contains (with-out-str
+        (play (vec (repeat 9 "X")) test-players)) "Game Over!\n")))
+
+  (it "ends when a player has won"
+    (let [board ["O" "O" "O" "" "" "" "" "" ""]]
+    (should= true
+      (.contains (with-out-str
+        (play board test-players)) "Game Over!\n"))))
   )
+
+(describe "in?"
+  (it "returns true if matches"
+    (should= true
+      (in? [[0 1 2] [3 4 5]] [0 1 2])))
+  (it "returns nil for no matches"
+    (should-be-nil
+      (in? [[0 1 2] [3 4 5]] [0 1 4]))))
+
+(describe "search-for-wins"
+  (def main-collection [[0 1 2] [3 4 5]])
+  (it "returns true if matches"
+    (should= true
+      (search-for-wins main-collection [0 1 2 9 8])))
+
+  (it "returns nil if no matches"
+    (should-be-nil
+      (search-for-wins main-collection [0 9]))))
+
+(describe "check for this win condition"
+  (it "returns true if win condition satisfied"
+    (should= true
+      (check-this-win-condition [0 1 2] [0 1 2 3 4 5])))
+  (it "returns false if condiiton not satisfied"
+    (should= false
+      (check-this-win-condition [0 1 2] [0 1 3 4 5]))))
 
 (run-specs)

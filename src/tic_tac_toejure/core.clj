@@ -50,7 +50,7 @@
 (defn check-this-win-condition [win-condition player-spots]
   (every? #(in? player-spots %) win-condition))
 
-(defn search-for-wins [wins player-spots]
+(defn check-for-all-win-conditions [wins player-spots]
   (boolean (some true? (map #(check-this-win-condition % player-spots) wins))))
 
 (defn get-winner [board players]
@@ -58,19 +58,19 @@
     false
     (let [marker (:marker (first players))]
       (let [player-spots (get-all-spaces-for board marker)]
-        (if (search-for-wins wins player-spots)
+        (if (check-for-all-win-conditions wins player-spots)
           marker
           (recur board (rest players)))))))
 
-(defn get-game-stats [board players]
+(defn analyze-game-state [board players]
   (let [winner (get-winner board players)]
     (let [board-is-full (not-any? #(= "" %) board)]
       (hash-map :winner winner, :game-over (or (boolean winner) board-is-full)))))
 
 (defn play [board players]
   (print-board board)
-  (let [game-stats (get-game-stats board players)]
-    (if (game-stats :game-over)
+  (let [game-state (analyze-game-state board players)]
+    (if (game-state :game-over)
       (print-it "Game Over!")
         (let [next-board (take-turn board (first players))]
           (recur next-board (reverse players))))))

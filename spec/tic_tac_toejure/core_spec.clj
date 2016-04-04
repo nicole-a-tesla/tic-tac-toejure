@@ -76,21 +76,21 @@
 (describe "game-stats :game-over"
   (it "false if board contans blanks"
     (let [almost-full ["" "x" "x" ""]]
-      (let [stats (get-game-stats almost-full test-players)]
+      (let [game-state (analyze-game-state almost-full test-players)]
         (should= false
-          (:game-over stats)))))
+          (game-state :game-over)))))
 
   (it "true if board contains no blanks"
     (let [full ["x" "x" "x" "x"]]
-      (let [stats (get-game-stats full test-players)]
+      (let [game-state (analyze-game-state full test-players)]
         (should= true
-          (:game-over stats)))))
+          (game-state :game-over)))))
 
   (it "true if a player has won"
     (let [o-won ["O" "O" "O" "" "" "" "" "" ""]]
-      (let [stats (get-game-stats o-won test-players)]
+      (let [game-state (analyze-game-state o-won test-players)]
         (should= true
-          (:game-over stats))))))
+          (game-state :game-over))))))
 
 (describe "get-all-spaces-for"
   (it "gets all spaces for given marker"
@@ -130,14 +130,14 @@
       (in? [[0 1 2] [3 4 5]] [0 1 4]))))
 
 (let [main-collection [[0 1 2] [3 4 5]]]
-  (describe "search-for-wins"
+  (describe "check-for-all-win-conditions"
     (it "returns true if matches"
       (should= true
-        (search-for-wins main-collection [0 1 2 9 8])))
+        (check-for-all-win-conditions main-collection [0 1 2 9 8])))
 
     (it "returns false if no matches"
       (should= false
-        (search-for-wins main-collection [0 9])))))
+        (check-for-all-win-conditions main-collection [0 9])))))
 
 (describe "check for this win condition"
   (it "returns true if win condition satisfied"

@@ -5,9 +5,4 @@
 (describe "Ai"
   (describe "random-move"
     (it "returns a string"
-      (should= java.lang.String (type (random-move))))
-
-    (it "returns numbers between 0 and 9"
-      (let [randos (repeatedly 100 #(rand-int 9))]
-        (should= true (empty? (filter #(> % 8) randos))))))
-)
+      (should= java.lang.String (type (random-move))))))

@@ -104,8 +104,8 @@
       (should= "O"
         (get-winner test-board test-players))))
 
-  (it "returns nil if no winner"
-    (should-be-nil
+  (it "returns false if no winner"
+    (should= false
       (get-winner (vec (repeat 9 "")) test-players))))
 
 (describe "Game End Conditions"

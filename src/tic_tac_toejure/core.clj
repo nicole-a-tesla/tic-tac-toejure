@@ -55,17 +55,17 @@
 
 (defn get-winner [board players]
   (if (empty? players)
-    nil
-      (let [marker (:marker (first players))]
-        (let [player-spots (get-all-spaces-for board marker)]
-          (if (search-for-wins wins player-spots)
-            marker
-            (recur board (rest players)))))))
+    false
+    (let [marker (:marker (first players))]
+      (let [player-spots (get-all-spaces-for board marker)]
+        (if (search-for-wins wins player-spots)
+          marker
+          (recur board (rest players)))))))
 
 (defn get-game-stats [board players]
   (let [winner (get-winner board players)]
     (let [board-is-full (not-any? #(= "" %) board)]
-      (hash-map :winner winner, :game-over (or (not= winner nil) board-is-full)))))
+      (hash-map :winner winner, :game-over (or (boolean winner) board-is-full)))))
 
 (defn play [board players]
   (print-board board)

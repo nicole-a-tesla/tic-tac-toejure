@@ -13,19 +13,19 @@
 
   (describe "is-valid-position"
     (it "does not match non-number strings"
-      (should= nil
+      (should= false
         (is-valid-position? "beep")))
 
     (it "does not match if number not on board"
-      (should= nil
+      (should= false
         (is-valid-position? "9")))
 
     (it "does not match floats"
-      (should= nil
+      (should= false
         (is-valid-position? "2.3")))
 
-    (it "returns input if int between 0 and 8"
-      (should= "4"
+    (it "returns true if int between 0 and 8"
+      (should= true
         (is-valid-position? "4"))))
 
   (describe "is-position-available?"
@@ -118,8 +118,7 @@
     (let [board ["O" "O" "O" "" "" "" "" "" ""]]
       (should= true
         (.contains (with-out-str
-          (play board test-players)) "Game Over!\n"))))
-  )
+          (play board test-players)) "Game Over!\n")))))
 
 (describe "in?"
   (it "returns true if matches"

@@ -14,7 +14,7 @@
   (Integer/parseInt input))
 
 (defn is-valid-position? [user-input]
-  (re-matches #"[0-8]" user-input))
+  (boolean (re-matches #"[0-8]" user-input)))
 
 (defn is-position-available? [board user-input]
   (= "" (get board (as-int user-input))))

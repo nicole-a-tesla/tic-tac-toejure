@@ -5,21 +5,21 @@
 
 (def empty-board (vec (repeat 9 "")))
 
-(def empty-board-output-str (str empty-space-view empty-space-view empty-space-view "\n"
-                                 empty-space-view empty-space-view empty-space-view "\n"
-                                 empty-space-view empty-space-view empty-space-view "\n\n"))
+(def empty-row (apply str (repeat 3 empty-space-view)))
+
+(def empty-board-output-str (str (apply str (repeat 3 (str empty-row "\n"))) "\n"))
 
 (describe "Ui"
   (around [it]
     (with-out-str (it)))
 
   (describe "test prompt"
-    (it "tests the input of prompt"
+    (it "returns the input string it receives"
       (should= "X"
         (with-in-str "X"
           (prompt "X or O?"))))
 
-    (it "tests the output of prompt"
+    (it "outputs its args to stdout"
       (should= "X or O?\n"
        (with-out-str (with-in-str "O"
         (prompt "X or O?"))))))
@@ -41,5 +41,3 @@
         (build-view empty-board))))
 
 )
-
-(run-specs)

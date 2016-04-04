@@ -13,19 +13,19 @@
 
   (describe "is-valid-position"
     (it "does not match non-number strings"
-      (should= nil
+      (should= false
         (is-valid-position? "beep")))
 
     (it "does not match if number not on board"
-      (should= nil
+      (should= false
         (is-valid-position? "9")))
 
     (it "does not match floats"
-      (should= nil
+      (should= false
         (is-valid-position? "2.3")))
 
-    (it "returns input if int between 0 and 8"
-      (should= "4"
+    (it "returns true if int between 0 and 8"
+      (should= true
         (is-valid-position? "4"))))
 
   (describe "is-position-available?"
@@ -44,25 +44,25 @@
   (describe "input-is-valid?"
 
     (it "returns true for if valid and available position"
-      (with-redefs [is-valid-position? (fn [_] "truthy string")]
+      (with-redefs [is-valid-position? (fn [_] true)]
         (with-redefs [is-position-available? (fn [& _] true)]
           (should= true
             (input-is-valid? build-board "something valid like 8")))))
 
-    (it "return nil (falsey) for invalid but available position "
-      (with-redefs [is-valid-position? (fn [_] nil)]
+    (it "return false for invalid but available position "
+      (with-redefs [is-valid-position? (fn [_] false)]
         (with-redefs [is-position-available? (fn [& _] true)]
-          (should-be-nil
+          (should= false
             (input-is-valid? build-board "random words like tune yards")))))
 
-    (it "returns nil (falsey) for invalid and unavailable position"
-     (with-redefs [is-valid-position? (fn [_] nil)]
+    (it "returns false for invalid and unavailable position"
+     (with-redefs [is-valid-position? (fn [_] false)]
        (with-redefs [is-position-available? (fn [& _] false)]
-          (should-be-nil
+          (should= false
             (input-is-valid? build-board "soumething out of bounds like 9")))))
 
     (it "returns false for positions that are taken"
-      (with-redefs [is-valid-position? (fn [_] "truthy string")]
+      (with-redefs [is-valid-position? (fn [_] true)]
         (with-redefs [is-position-available? (fn [& _] false)]
           (should= false
             (input-is-valid? build-board "valid index like 0 but for a full board")))))))
@@ -75,37 +75,37 @@
 
 (describe "game-stats :game-over"
   (it "false if board contans blanks"
-    (def almost-full ["" "x" "x" ""])
-    (def stats (get-game-stats almost-full test-players))
-    (should= false
-      (:game-over stats)))
+    (let [almost-full ["" "x" "x" ""]]
+      (let [game-state (analyze-game-state almost-full test-players)]
+        (should= false
+          (game-state :game-over)))))
 
   (it "true if board contains no blanks"
-    (def full ["x" "x" "x" "x"])
-    (def stats (get-game-stats full test-players))
-    (should= true
-      (:game-over stats)))
+    (let [full ["x" "x" "x" "x"]]
+      (let [game-state (analyze-game-state full test-players)]
+        (should= true
+          (game-state :game-over)))))
 
   (it "true if a player has won"
-    (def o-won ["O" "O" "O" "" "" "" "" "" ""])
-    (def stats (get-game-stats o-won test-players))
-    (should= true
-      (:game-over stats))))
+    (let [o-won ["O" "O" "O" "" "" "" "" "" ""]]
+      (let [game-state (analyze-game-state o-won test-players)]
+        (should= true
+          (game-state :game-over))))))
 
 (describe "get-all-spaces-for"
   (it "gets all spaces for given marker"
-    (def new-board ["O" "O" "O" "" "" "" "" "" ""])
+    (let [new-board ["O" "O" "O" "" "" "" "" "" ""]]
       (should= [0 1 2]
-        (get-all-spaces-for new-board "O"))))
+        (get-all-spaces-for new-board "O")))))
 
 (describe "get-winner"
   (it "returns winner's marker"
-    (def test-board ["O" "O" "O" "" "" "" "" "" ""])
-    (should= "O"
-      (get-winner test-board test-players)))
+    (let [test-board ["O" "O" "O" "" "" "" "" "" ""]]
+      (should= "O"
+        (get-winner test-board test-players))))
 
-  (it "returns nil if no winner"
-    (should-be-nil
+  (it "returns false if no winner"
+    (should= false
       (get-winner (vec (repeat 9 "")) test-players))))
 
 (describe "Game End Conditions"
@@ -116,35 +116,34 @@
 
   (it "ends when a player has won"
     (let [board ["O" "O" "O" "" "" "" "" "" ""]]
-    (should= true
-      (.contains (with-out-str
-        (play board test-players)) "Game Over!\n"))))
-  )
+      (should= true
+        (.contains (with-out-str
+          (play board test-players)) "Game Over!\n")))))
 
 (describe "in?"
   (it "returns true if matches"
     (should= true
       (in? [[0 1 2] [3 4 5]] [0 1 2])))
-  (it "returns nil for no matches"
-    (should-be-nil
+
+  (it "returns false for no matches"
+    (should= false
       (in? [[0 1 2] [3 4 5]] [0 1 4]))))
 
-(describe "search-for-wins"
-  (def main-collection [[0 1 2] [3 4 5]])
-  (it "returns true if matches"
-    (should= true
-      (search-for-wins main-collection [0 1 2 9 8])))
+(let [main-collection [[0 1 2] [3 4 5]]]
+  (describe "check-for-all-win-conditions"
+    (it "returns true if matches"
+      (should= true
+        (check-for-all-win-conditions main-collection [0 1 2 9 8])))
 
-  (it "returns nil if no matches"
-    (should-be-nil
-      (search-for-wins main-collection [0 9]))))
+    (it "returns false if no matches"
+      (should= false
+        (check-for-all-win-conditions main-collection [0 9])))))
 
 (describe "check for this win condition"
   (it "returns true if win condition satisfied"
     (should= true
       (check-this-win-condition [0 1 2] [0 1 2 3 4 5])))
-  (it "returns false if condiiton not satisfied"
+
+  (it "returns false if condititon not satisfied"
     (should= false
       (check-this-win-condition [0 1 2] [0 1 3 4 5]))))
-
-(run-specs)

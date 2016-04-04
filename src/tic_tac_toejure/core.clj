@@ -34,14 +34,13 @@
   (assoc board position marker))
 
 (defn take-turn [board player]
-  (def move (get-valid-move board (:move-getter player)))
-  (place-marker board move (:marker player)))
+  (let [move (get-valid-move board (:move-getter player))]
+    (place-marker board move (:marker player))))
 
 (defn get-all-spaces-for [board marker]
-  (def indexed-sublists (map-indexed vector board))
-  (def marker-only (filter #(= marker (% 1)) indexed-sublists))
-  (def final (map #(get % 0) marker-only))
-  final)
+  (let [indexed-sublists (map-indexed vector board)]
+    (let [marker-only (filter #(= marker (% 1)) indexed-sublists)]
+      (map #(get % 0) marker-only))))
 
 (def wins [[0 1 2] [3 4 5] [6 7 8] [0 3 6] [1 4 7] [2 5 8] [0 4 8] [2 4 6]])
 
@@ -58,26 +57,26 @@
   (if (empty? players)
     nil
     (do
-      (def marker (:marker (first players)))
-      (def player-spots (get-all-spaces-for board marker))
-      (if (search-for-wins wins player-spots)
-        marker
-        (recur board (rest players))))))
+      (let [marker (:marker (first players))]
+        (let [player-spots (get-all-spaces-for board marker)]
+          (if (search-for-wins wins player-spots)
+            marker
+            (recur board (rest players))))))))
 
 (defn get-game-stats [board players]
-  (def winner (get-winner board players))
-  (def board-is-full (not-any? #(= "" %) board))
-  (hash-map :winner winner, :game-over (or (not= winner nil) board-is-full)))
+  (let [winner (get-winner board players)]
+    (let [board-is-full (not-any? #(= "" %) board)]
+      (hash-map :winner winner, :game-over (or (not= winner nil) board-is-full)))))
 
 (defn play [board players]
   (print-board board)
-  (def game-stats (get-game-stats board players))
-  (if (:game-over game-stats)
-    (print-it "Game Over!")
-    (do
-      (def next-board (take-turn board (first players)))
-      (recur next-board (reverse players)))))
+  (let [game-stats (get-game-stats board players)]
+    (if (:game-over game-stats)
+      (print-it "Game Over!")
+      (do
+        (let [next-board (take-turn board (first players))]
+          (recur next-board (reverse players)))))))
 
 (defn -main [& args]
-  (def players (vector human-player computer-player))
-  (play build-board players))
+  (let [players (vector human-player computer-player)]
+    (play build-board players)))

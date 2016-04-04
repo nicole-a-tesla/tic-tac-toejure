@@ -75,34 +75,34 @@
 
 (describe "game-stats :game-over"
   (it "false if board contans blanks"
-    (def almost-full ["" "x" "x" ""])
-    (def stats (get-game-stats almost-full test-players))
-    (should= false
-      (:game-over stats)))
+    (let [almost-full ["" "x" "x" ""]]
+      (let [stats (get-game-stats almost-full test-players)]
+        (should= false
+          (:game-over stats)))))
 
   (it "true if board contains no blanks"
-    (def full ["x" "x" "x" "x"])
-    (def stats (get-game-stats full test-players))
-    (should= true
-      (:game-over stats)))
+    (let [full ["x" "x" "x" "x"]]
+      (let [stats (get-game-stats full test-players)]
+        (should= true
+          (:game-over stats)))))
 
   (it "true if a player has won"
-    (def o-won ["O" "O" "O" "" "" "" "" "" ""])
-    (def stats (get-game-stats o-won test-players))
-    (should= true
-      (:game-over stats))))
+    (let [o-won ["O" "O" "O" "" "" "" "" "" ""]]
+      (let [stats (get-game-stats o-won test-players)]
+        (should= true
+          (:game-over stats))))))
 
 (describe "get-all-spaces-for"
   (it "gets all spaces for given marker"
-    (def new-board ["O" "O" "O" "" "" "" "" "" ""])
+    (let [new-board ["O" "O" "O" "" "" "" "" "" ""]]
       (should= [0 1 2]
-        (get-all-spaces-for new-board "O"))))
+        (get-all-spaces-for new-board "O")))))
 
 (describe "get-winner"
   (it "returns winner's marker"
-    (def test-board ["O" "O" "O" "" "" "" "" "" ""])
-    (should= "O"
-      (get-winner test-board test-players)))
+    (let [test-board ["O" "O" "O" "" "" "" "" "" ""]]
+      (should= "O"
+        (get-winner test-board test-players))))
 
   (it "returns nil if no winner"
     (should-be-nil
@@ -116,33 +116,35 @@
 
   (it "ends when a player has won"
     (let [board ["O" "O" "O" "" "" "" "" "" ""]]
-    (should= true
-      (.contains (with-out-str
-        (play board test-players)) "Game Over!\n"))))
+      (should= true
+        (.contains (with-out-str
+          (play board test-players)) "Game Over!\n"))))
   )
 
 (describe "in?"
   (it "returns true if matches"
     (should= true
       (in? [[0 1 2] [3 4 5]] [0 1 2])))
+
   (it "returns nil for no matches"
     (should-be-nil
       (in? [[0 1 2] [3 4 5]] [0 1 4]))))
 
-(describe "search-for-wins"
-  (def main-collection [[0 1 2] [3 4 5]])
-  (it "returns true if matches"
-    (should= true
-      (search-for-wins main-collection [0 1 2 9 8])))
+(let [main-collection [[0 1 2] [3 4 5]]]
+  (describe "search-for-wins"
+    (it "returns true if matches"
+      (should= true
+        (search-for-wins main-collection [0 1 2 9 8])))
 
-  (it "returns nil if no matches"
-    (should-be-nil
-      (search-for-wins main-collection [0 9]))))
+    (it "returns nil if no matches"
+      (should-be-nil
+        (search-for-wins main-collection [0 9])))))
 
 (describe "check for this win condition"
   (it "returns true if win condition satisfied"
     (should= true
       (check-this-win-condition [0 1 2] [0 1 2 3 4 5])))
+
   (it "returns false if condiiton not satisfied"
     (should= false
       (check-this-win-condition [0 1 2] [0 1 3 4 5]))))

@@ -44,25 +44,25 @@
   (describe "input-is-valid?"
 
     (it "returns true for if valid and available position"
-      (with-redefs [is-valid-position? (fn [_] "truthy string")]
+      (with-redefs [is-valid-position? (fn [_] true)]
         (with-redefs [is-position-available? (fn [& _] true)]
           (should= true
             (input-is-valid? build-board "something valid like 8")))))
 
-    (it "return nil (falsey) for invalid but available position "
-      (with-redefs [is-valid-position? (fn [_] nil)]
+    (it "return false for invalid but available position "
+      (with-redefs [is-valid-position? (fn [_] false)]
         (with-redefs [is-position-available? (fn [& _] true)]
-          (should-be-nil
+          (should= false
             (input-is-valid? build-board "random words like tune yards")))))
 
-    (it "returns nil (falsey) for invalid and unavailable position"
-     (with-redefs [is-valid-position? (fn [_] nil)]
+    (it "returns false for invalid and unavailable position"
+     (with-redefs [is-valid-position? (fn [_] false)]
        (with-redefs [is-position-available? (fn [& _] false)]
-          (should-be-nil
+          (should= false
             (input-is-valid? build-board "soumething out of bounds like 9")))))
 
     (it "returns false for positions that are taken"
-      (with-redefs [is-valid-position? (fn [_] "truthy string")]
+      (with-redefs [is-valid-position? (fn [_] true)]
         (with-redefs [is-position-available? (fn [& _] false)]
           (should= false
             (input-is-valid? build-board "valid index like 0 but for a full board")))))))

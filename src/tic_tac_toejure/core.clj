@@ -34,8 +34,8 @@
   (assoc board position marker))
 
 (defn take-turn [board player]
-  (let [move (get-valid-move board (:move-getter player))]
-    (place-marker board move (:marker player))))
+  (let [move (get-valid-move board (player :move-getter))]
+    (place-marker board move (player :marker))))
 
 (defn get-all-spaces-for [board marker]
   (let [indexed-sublists (map-indexed vector board)]
@@ -56,12 +56,11 @@
 (defn get-winner [board players]
   (if (empty? players)
     nil
-    (do
       (let [marker (:marker (first players))]
         (let [player-spots (get-all-spaces-for board marker)]
           (if (search-for-wins wins player-spots)
             marker
-            (recur board (rest players))))))))
+            (recur board (rest players)))))))
 
 (defn get-game-stats [board players]
   (let [winner (get-winner board players)]
@@ -71,11 +70,10 @@
 (defn play [board players]
   (print-board board)
   (let [game-stats (get-game-stats board players)]
-    (if (:game-over game-stats)
+    (if (game-stats :game-over)
       (print-it "Game Over!")
-      (do
         (let [next-board (take-turn board (first players))]
-          (recur next-board (reverse players)))))))
+          (recur next-board (reverse players))))))
 
 (defn -main [& args]
   (let [players (vector human-player computer-player)]

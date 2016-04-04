@@ -125,8 +125,8 @@
     (should= true
       (in? [[0 1 2] [3 4 5]] [0 1 2])))
 
-  (it "returns nil for no matches"
-    (should-be-nil
+  (it "returns false for no matches"
+    (should= false
       (in? [[0 1 2] [3 4 5]] [0 1 4]))))
 
 (let [main-collection [[0 1 2] [3 4 5]]]
@@ -135,8 +135,8 @@
       (should= true
         (search-for-wins main-collection [0 1 2 9 8])))
 
-    (it "returns nil if no matches"
-      (should-be-nil
+    (it "returns false if no matches"
+      (should= false
         (search-for-wins main-collection [0 9])))))
 
 (describe "check for this win condition"
@@ -144,6 +144,6 @@
     (should= true
       (check-this-win-condition [0 1 2] [0 1 2 3 4 5])))
 
-  (it "returns false if condiiton not satisfied"
+  (it "returns false if condititon not satisfied"
     (should= false
       (check-this-win-condition [0 1 2] [0 1 3 4 5]))))

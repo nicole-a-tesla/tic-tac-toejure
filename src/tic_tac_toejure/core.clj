@@ -45,13 +45,13 @@
 (def wins [[0 1 2] [3 4 5] [6 7 8] [0 3 6] [1 4 7] [2 5 8] [0 4 8] [2 4 6]])
 
 (defn in? [collection item]
-  (some #(= item %) collection))
+  (boolean (some #(= item %) collection)))
 
 (defn check-this-win-condition [win-condition player-spots]
   (every? #(in? player-spots %) win-condition))
 
 (defn search-for-wins [wins player-spots]
-  (some true? (map #(check-this-win-condition % player-spots) wins)))
+  (boolean (some true? (map #(check-this-win-condition % player-spots) wins))))
 
 (defn get-winner [board players]
   (if (empty? players)

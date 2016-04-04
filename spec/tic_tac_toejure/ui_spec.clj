@@ -41,5 +41,3 @@
         (build-view empty-board))))
 
 )
-
-(run-specs)

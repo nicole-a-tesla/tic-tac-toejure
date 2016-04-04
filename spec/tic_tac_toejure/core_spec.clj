@@ -146,5 +146,3 @@
   (it "returns false if condiiton not satisfied"
     (should= false
       (check-this-win-condition [0 1 2] [0 1 3 4 5]))))
-
-(run-specs)

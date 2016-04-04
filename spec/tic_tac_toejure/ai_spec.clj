@@ -11,5 +11,3 @@
       (def randos (repeatedly 100 #(rand-int 9)))
       (should= true (empty? (filter #(> % 8) randos)))))
 )
-
-(run-specs)

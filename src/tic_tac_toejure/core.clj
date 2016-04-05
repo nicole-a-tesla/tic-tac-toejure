@@ -2,6 +2,7 @@
   (:require [tic-tac-toejure.ui :refer :all]
             [tic-tac-toejure.ai :refer :all]
             [tic-tac-toejure.board_analysis :refer :all]))
+
 (def build-board
   (vec (repeat 9 "")))
 

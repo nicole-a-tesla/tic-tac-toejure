@@ -112,13 +112,18 @@
   (it "game ends if board is full"
     (should= true
       (.contains (with-out-str
-        (play (vec (repeat 9 "X")) test-players)) "Game Over!\n")))
+        (play (vec (repeat 9 "X")) test-players)) "Game Over!")))
 
-  (it "ends when a player has won"
-    (let [board ["O" "O" "O" "" "" "" "" "" ""]]
+  (let [board ["O" "O" "O" "" "" "" "" "" ""]]
+    (it "ends when a player has won"
       (should= true
         (.contains (with-out-str
-          (play board test-players)) "Game Over!\n")))))
+          (play board test-players)) "Game Over!")))
+
+    (it "announces winning player"
+      (should= true
+        (.contains (with-out-str
+          (play board test-players)) "O wins!")))))
 
 (describe "in?"
   (it "returns true if matches"

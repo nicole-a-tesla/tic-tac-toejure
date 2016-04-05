@@ -4,7 +4,6 @@
 
 (def empty-space-view ":___")
 
-
 (defn print-it [message]
   (println (apply str message)))
 
@@ -13,8 +12,7 @@
   (read-line))
 
 (defn get-player-move []
-  (prompt get-player-move-message)
-)
+  (prompt get-player-move-message))
 
 (defn state-to-view-mapper [space-contents]
   (if (clojure.string/blank? space-contents)
@@ -31,6 +29,8 @@
     (print-it (build-view(first rows)))
     (if (empty? (rest rows))
       (print-it "")
-      (recur board (rest rows)))
-    )
-)
+      (recur board (rest rows)))))
+
+(defn announce-game-over [winner]
+  (let [winner-name (if winner winner "Nobody")]
+    (print-it (str "Game Over!\n" winner-name " wins!" ))))

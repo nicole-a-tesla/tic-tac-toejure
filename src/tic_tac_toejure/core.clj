@@ -56,7 +56,7 @@
 (defn get-winner [board players]
   (if (empty? players)
     false
-    (let [marker (:marker (first players))]
+    (let [marker ((first players) :marker)]
       (let [player-spots (get-all-spaces-for board marker)]
         (if (check-for-all-win-conditions wins player-spots)
           marker
@@ -71,9 +71,9 @@
   (print-board board)
   (let [game-state (analyze-game-state board players)]
     (if (game-state :game-over)
-      (print-it "Game Over!")
-        (let [next-board (take-turn board (first players))]
-          (recur next-board (reverse players))))))
+      (announce-game-over (game-state :winner))
+      (let [next-board (take-turn board (first players))]
+        (recur next-board (reverse players))))))
 
 (defn -main [& args]
   (let [players (vector human-player computer-player)]

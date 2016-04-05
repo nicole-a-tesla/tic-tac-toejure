@@ -74,40 +74,41 @@
       (should= 3
         (get-valid-move build-board (fn [] "3")))))
 
-(describe "game-stats :game-over"
-  (it "false if board contans blanks"
-    (let [almost-full ["" "x" "x" ""]]
-      (let [game-state (analyze-game-state almost-full test-players)]
-        (should= false
-          (game-state :game-over)))))
-
-  (it "true if board contains no blanks"
-    (let [full ["x" "x" "x" "x"]]
-      (let [game-state (analyze-game-state full test-players)]
-        (should= true
-          (game-state :game-over)))))
-
-  (it "true if a player has won"
-    (let [o-won ["O" "O" "O" "" "" "" "" "" ""]]
-      (let [game-state (analyze-game-state o-won test-players)]
-        (should= true
-          (game-state :game-over))))))
-
 (describe "get-all-spaces-for"
   (it "gets all spaces for given marker"
     (let [new-board ["O" "O" "O" "" "" "" "" "" ""]]
       (should= [0 1 2]
         (get-all-spaces-for new-board "O")))))
 
-(describe "get-winner"
-  (it "returns winner's marker"
-    (let [test-board ["O" "O" "O" "" "" "" "" "" ""]]
-      (should= "O"
-        (get-winner test-board test-players))))
+(let [test-markers ["X" "O"]]
+  (describe "game-stats :game-over"
+    (it "false if board contans blanks"
+      (let [almost-full ["" "x" "x" ""]]
+        (let [game-state (analyze-game-state almost-full test-markers)]
+          (should= false
+            (game-state :game-over)))))
 
-  (it "returns false if no winner"
-    (should= false
-      (get-winner (vec (repeat 9 "")) test-players))))
+    (it "true if board contains no blanks"
+      (let [full ["x" "x" "x" "x"]]
+        (let [game-state (analyze-game-state full test-markers)]
+          (should= true
+            (game-state :game-over)))))
+
+    (it "true if a player has won"
+      (let [o-won ["O" "O" "O" "" "" "" "" "" ""]]
+        (let [game-state (analyze-game-state o-won test-markers)]
+          (should= true
+            (game-state :game-over))))))
+
+  (describe "get-winner"
+    (it "returns winner's marker"
+      (let [test-board ["O" "O" "O" "" "" "" "" "" ""]]
+        (should= "O"
+          (get-winner test-board test-markers))))
+
+    (it "returns false if no winner"
+      (should= false
+        (get-winner (vec (repeat 9 "")) test-markers)))))
 
 (describe "Game End Conditions"
   (it "game ends if board is full"

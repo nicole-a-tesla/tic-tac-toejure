@@ -7,8 +7,8 @@
 (def human-player
   {:marker "X" :move-getter get-player-move :name "Human Player"})
 
-(def computer-player
-  {:marker "O" :move-getter random-move :name "Computer Player"})
+(defn computer-player [strategy]
+  {:marker "O" :move-getter strategy :name "Computer Player"})
 
 (defn as-int [input]
   (Integer/parseInt input))
@@ -76,5 +76,5 @@
         (recur next-board (reverse players))))))
 
 (defn -main [& args]
-  (let [players (vector human-player computer-player)]
+  (let [players (vector human-player (computer-player random-move))]
     (play build-board players)))

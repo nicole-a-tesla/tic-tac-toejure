@@ -1,8 +1,9 @@
 (ns tic-tac-toejure.core-spec
   (:require [speclj.core :refer :all]
-            [tic-tac-toejure.core :refer :all]))
+            [tic-tac-toejure.core :refer :all]
+            [tic-tac-toejure.ai :refer :all]))
 
-(def test-players (vector human-player computer-player))
+(def test-players (vector human-player (computer-player random-move)))
 
 (describe "place-marker"
   (it "adds marker to space"

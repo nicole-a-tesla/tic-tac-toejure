@@ -40,4 +40,16 @@
       (should= (repeat 9 ":___")
         (build-view empty-board))))
 
+  (describe "Game over messaging"
+    (it "reports Winner's name if winner"
+      (let [winner "X"]
+        (should= "Game Over!\nX wins!\n"
+          (with-out-str
+            (announce-game-over winner)))))
+
+    (it "reports that nobody won if winner is false"
+      (let [winner false]
+        (should= "Game Over!\nNobody wins!\n"
+          (with-out-str
+            (announce-game-over winner))))))
 )

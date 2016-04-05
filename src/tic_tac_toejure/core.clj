@@ -1,6 +1,7 @@
 (ns tic-tac-toejure.core
   (:require [tic-tac-toejure.ui :refer :all]
-            [tic-tac-toejure.ai :refer :all]))
+            [tic-tac-toejure.ai :refer :all]
+            [tic-tac-toejure.board_analysis :refer :all]))
 (def build-board
   (vec (repeat 9 "")))
 
@@ -36,31 +37,6 @@
 (defn take-turn [board player]
   (let [move (get-valid-move board (player :move-getter))]
     (place-marker board move (player :marker))))
-
-(defn get-all-spaces-for [board marker]
-  (let [indexed-sublists (map-indexed vector board)]
-    (let [marker-only (filter #(= marker (% 1)) indexed-sublists)]
-      (map #(get % 0) marker-only))))
-
-(def wins [[0 1 2] [3 4 5] [6 7 8] [0 3 6] [1 4 7] [2 5 8] [0 4 8] [2 4 6]])
-
-(defn in? [collection item]
-  (boolean (some #(= item %) collection)))
-
-(defn check-this-win-condition [win-condition player-spots]
-  (every? #(in? player-spots %) win-condition))
-
-(defn check-for-all-win-conditions [wins player-spots]
-  (boolean (some true? (map #(check-this-win-condition % player-spots) wins))))
-
-(defn get-winner [board markers]
-  (if (empty? markers)
-    false
-    (let [marker (first markers)]
-      (let [player-spots (get-all-spaces-for board marker)]
-        (if (check-for-all-win-conditions wins player-spots)
-          marker
-          (recur board (rest markers)))))))
 
 (defn analyze-game-state [board players]
   (let [winner (get-winner board players)]

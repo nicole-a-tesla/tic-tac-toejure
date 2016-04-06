@@ -2,6 +2,8 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toejure.board_analysis :refer :all]))
 
+(def test-markers (vector "X" "O"))
+
 (describe "in?"
   (it "returns true if matches"
     (should= true
@@ -30,19 +32,46 @@
     (should= false
       (check-this-win-condition [0 1 2] [0 1 3 4 5]))))
 
-(let [test-markers ["X" "O"]]
-  (describe "get-winner"
-    (it "returns winner's marker"
-      (let [test-board ["O" "O" "O" "" "" "" "" "" ""]]
-        (should= "O"
-          (get-winner test-board test-markers))))
+(describe "get-winner"
+  (it "returns winner's marker"
+    (let [test-board ["O" "O" "O" "" "" "" "" "" ""]]
+      (should= "O"
+        (get-winner test-board test-markers))))
 
-    (it "returns false if no winner"
-      (should= false
-        (get-winner (vec (repeat 9 "")) test-markers)))))
+  (it "returns false if no winner"
+    (should= false
+      (get-winner (vec (repeat 9 "")) test-markers))))
 
 (describe "get-all-spaces-for"
   (it "gets all spaces for given marker"
     (let [new-board ["O" "O" "O" "" "" "" "" "" ""]]
       (should= [0 1 2]
         (get-all-spaces-for new-board "O")))))
+
+(describe "game-stats :game-over"
+  (it "false if board contans blanks"
+    (let [almost-full ["" "x" "x" ""]]
+      (let [game-state (analyze-game-state almost-full test-markers)]
+        (should= false
+          (game-state :game-over)))))
+
+  (it "true if board contains no blanks"
+    (let [full ["x" "x" "x" "x"]]
+      (let [game-state (analyze-game-state full test-markers)]
+        (should= true
+          (game-state :game-over)))))
+
+  (it "true if a player has won"
+    (let [o-won ["O" "O" "O" "" "" "" "" "" ""]]
+      (let [game-state (analyze-game-state o-won test-markers)]
+        (should= true
+          (game-state :game-over))))))
+
+(describe "game-over"
+  (it "true if winner"
+    (should= true
+      (game-over? (repeat 9 "O") test-markers)))
+
+  (it "false if no winner"
+    (should= false
+      (game-over? (repeat 9 "") test-markers))))

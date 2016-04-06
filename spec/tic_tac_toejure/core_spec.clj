@@ -74,26 +74,6 @@
       (should= 3
         (get-valid-move build-board (fn [] "3")))))
 
-(let [test-markers ["X" "O"]]
-  (describe "game-stats :game-over"
-    (it "false if board contans blanks"
-      (let [almost-full ["" "x" "x" ""]]
-        (let [game-state (analyze-game-state almost-full test-markers)]
-          (should= false
-            (game-state :game-over)))))
-
-    (it "true if board contains no blanks"
-      (let [full ["x" "x" "x" "x"]]
-        (let [game-state (analyze-game-state full test-markers)]
-          (should= true
-            (game-state :game-over)))))
-
-    (it "true if a player has won"
-      (let [o-won ["O" "O" "O" "" "" "" "" "" ""]]
-        (let [game-state (analyze-game-state o-won test-markers)]
-          (should= true
-            (game-state :game-over)))))))
-
 (describe "Game End Conditions"
   (it "game ends if board is full"
     (should= true

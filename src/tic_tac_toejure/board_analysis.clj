@@ -24,3 +24,13 @@
         (if (check-for-all-win-conditions wins player-spots)
           marker
           (recur board (rest markers)))))))
+
+(defn board-is-full? [board]
+  (not-any? #(= "" %) board))
+
+(defn game-over? [board markers]
+  (boolean (or (get-winner board markers) (board-is-full? board))))
+
+(defn analyze-game-state [board markers]
+  (hash-map :winner (get-winner board markers), :game-over (game-over? board markers)))
+

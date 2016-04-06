@@ -32,17 +32,9 @@
       (as-int move)
       (recur board move-getter (move-getter)))))
 
-(defn place-marker [board position marker]
-  (assoc board position marker))
-
 (defn take-turn [board player]
   (let [move (get-valid-move board (player :move-getter))]
     (place-marker board move (player :marker))))
-
-(defn analyze-game-state [board players]
-  (let [winner (get-winner board players)]
-    (let [board-is-full (not-any? #(= "" %) board)]
-      (hash-map :winner winner, :game-over (or (boolean winner) board-is-full)))))
 
 (defn play [board players]
   (print-board board)

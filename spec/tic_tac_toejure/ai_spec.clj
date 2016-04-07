@@ -45,10 +45,12 @@
         (should= 10
           (minimax-move (repeat 9 "O") "O" "X")))
 
-    (it "picks winning position if available"
+    (xit "picks winning position if available"
       (let [board (into (vec (repeat 7 "")) (vec (repeat 2 "O")))]
         (should= 2
           (minimax-move board "O" "X"))))
 
   )
+
+
 )
